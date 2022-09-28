@@ -1,13 +1,17 @@
 import React from "react";
 import { format } from "date-fns";
-const BookingModal = ({ date, treatment, data }) => {
-  const { name, slots } = treatment;
+const BookingModal = ({ date, treatment,setTreatment }) => {
+  const {_id, name, slots } = treatment;
 
-  // const handelformSlot= event => {
-  //   event.preventDefault();
-  //   const slot = event.target.slot.value;
-  //   console.log(slot);
-  // }
+  const handelformSlot= event => {
+    event.preventDefault();
+    const slot = event.target.slot.value;
+    const name = event.target.name.value;
+    const phone = event.target.phone.value;
+    const email = event.target.email.value;
+    console.log(slot, name, phone, email);
+    setTreatment(null);
+  }
   return (
    
     <div>
@@ -22,10 +26,9 @@ const BookingModal = ({ date, treatment, data }) => {
           </label>
           <h3 class="font-bold text-lg mb-6">{name}</h3>
   
-          <from  class="grid grid-cols-1 gap-3 justify-items-center mt-2">
+          <form onSubmit={handelformSlot}  class="grid grid-cols-1 gap-3 justify-items-center mt-2">
             <input
               type="text"
-              name="date"
               disabled
               placeholder={format(date, "PP")}
               class="input w-full max-w-lg "
@@ -59,7 +62,7 @@ const BookingModal = ({ date, treatment, data }) => {
               value="Submit "
               class="btn btn-primary text-white uppercase  w-full"
             />
-          </from>
+          </form>
         </div>
       </div>
     </div>
