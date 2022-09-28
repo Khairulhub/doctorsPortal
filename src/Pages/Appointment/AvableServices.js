@@ -42,10 +42,10 @@ const AvableServices = ({date}) => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-28">
         {
-            services.map(service => <Slots key={service._id} service={service} setTreatment={setTreatment}></Slots>)
+            services.map(service => <Slots key={service._id} service={service}  setTreatment={setTreatment}></Slots>)
         }
       </div>
-      {treatment && <BookingModal treatment={treatment}></BookingModal>}
+      {treatment && <BookingModal date={date} treatment={treatment} ></BookingModal>}
     </div>
   );
 };
