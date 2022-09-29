@@ -13,7 +13,7 @@ const AvableServices = ({date}) => {
     const [treatment, setTreatment] = useState(null);
 
     useEffect(() => {
-        fetch("Services.json")
+        fetch("http://localhost:5000/service")
             .then(res => res.json())
             .then(data => setServices(data))
     },[])
