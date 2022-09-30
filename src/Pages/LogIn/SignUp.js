@@ -1,8 +1,8 @@
 import React from 'react';
-import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle, useUpdateProfile } from "react-firebase-hooks/auth";
 import auth from "../../Firebase.init";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
@@ -15,28 +15,40 @@ const SignUp = () => {
     loading,
     error,
   ] = useCreateUserWithEmailAndPassword(auth);
+  const [updateProfile, updating, updateError] = useUpdateProfile(auth);
+
+    const navigate = useNavigate();
+
 
     let signUpError;
 
 
-    if(error || gError){
-        signUpError = <p className="text-red-500">{error?.message || gError?.message}</p>
+    if(error || gError ||updateError){
+        signUpError = <p className="text-red-500">{error?.message || gError?.message || updateError?.message}</p>
     }
 
 
 
-    if(gLoading || loading){
+    if(gLoading || loading || updating){
         return <div className="flex justify-center items-center h-screen">
             <button className=" loading btn">Loading...</button>
         </div>
     }
+
+
     if (user||gUser) {
         console.log(user||gUser);
     }
+
     
-    const onSubmit = data => {
+    
+    const onSubmit =async data => {
       console.log(data)
-      createUserWithEmailAndPassword(data.email, data.password)
+      await createUserWithEmailAndPassword(data.email, data.password)
+      await updateProfile({ displayName: data.name });
+      // , photoURL
+
+      navigate('/appointment')
       };
 
 
@@ -111,7 +123,7 @@ const SignUp = () => {
                 class="input input-bordered w-full max-w-xs" />
                 <label className="label">
                     { errors.password?.type==='required' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}
-                    { errors.password?.type==='pattern' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}
+                    { errors.password?.type==='minLength' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}
                 </label>
                
                  </div>
