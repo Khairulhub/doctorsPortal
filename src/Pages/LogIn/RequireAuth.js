@@ -8,8 +8,8 @@ const RequireAuth = ({children}) => {
     const location = useLocation();
 
     if(loading ){
-        return <div className="flex justify-center items-center h-screen">
-            <button className=" loading btn">Loading...</button>
+        return <div    className="flex justify-center items-center h-screen">
+            <button    className=" loading btn">Loading...</button>
         </div>
     }
 

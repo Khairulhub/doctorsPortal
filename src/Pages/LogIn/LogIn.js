@@ -1,5 +1,5 @@
-import React from "react";
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import React, { useEffect } from "react";
+import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import auth from "../../Firebase.init";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -16,7 +16,9 @@ const LogIn = () => {
       error,
     ] = useSignInWithEmailAndPassword(auth);
 
+    // password reset or forgate password
 
+    const [sendPasswordResetEmail, sending, passwordError] = useSendPasswordResetEmail(auth);
 
     let singInError;
     const navigate = useNavigate();
@@ -24,28 +26,35 @@ const LogIn = () => {
     let from = location.state?.from || '/appointment';
 
 
-
-
-    if(error || gError){
-        singInError = <p className="text-red-500">{error?.message || gError?.message}</p>
-    }
-
-
-
-    if(gLoading || loading){
-        return <div className="flex justify-center items-center h-screen">
-            <button className=" loading btn">Loading...</button>
-        </div>
-    }
-    if (user||gUser) {
+    useEffect(() => {
+      if (user||gUser) {
         console.log(user||gUser);
         navigate(from, {replace: true})
     }
+    }, [user, gUser, navigate, from])
+
+    if(error || gError ||passwordError){
+        singInError = <p    className="text-red-500">{error?.message || gError?.message || passwordError?.message}</p>
+    }
+
+
+
+    if(gLoading || loading ||sending){
+        return <div    className="flex justify-center items-center h-screen">
+            <button    className=" loading btn">Loading...</button>
+        </div>
+    }
+   
     
-    const onSubmit = data => {
+    const onSubmit =async data => {
       console.log(data)
-      signInWithEmailAndPassword(auth, data.email, data.password)
+       await signInWithEmailAndPassword(auth, data.email, data.password)
+      
       };
+
+      const forgetPassword = async data => {
+        await sendPasswordResetEmail(data.email);
+      }
 
 
 
@@ -53,14 +62,14 @@ const LogIn = () => {
 
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div class="card w-96 bg-base-100 shadow-xl">
-        <div class="card-body">
-          <h2 class="text-center text-3xl font-bold ">Login</h2>
+    <div    className="flex justify-center items-center h-screen">
+      <div    className="card w-96 bg-base-100 shadow-xl">
+       <div    className="card-body">
+          <h2    className="text-center text-3xl font-bold ">Login</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
-                <div class="form-control w-full max-w-xs">
-                 <label class="label">
-                <span class="label-text">Email</span>
+               <div    className="form-control w-full max-w-xs">
+                 <label    className="label">
+                <span lass="label-text">Email</span>
              
                  </label>
                  <input  {...register("email", { 
@@ -74,18 +83,18 @@ const LogIn = () => {
                  } })} 
 
                  type="email" placeholder="Your email" 
-                class="input input-bordered w-full max-w-xs" />
-                <label className="label">{ errors.email?.type==='required' && <span className="label-text-alt text-red-500">{errors.email.message}</span>}
-                { errors.email?.type==='pattern' && <span className="label-text-alt text-red-500">{errors.email.message}</span>}</label>
+                  className="input input-bordered w-full max-w-xs" />
+                <label    className="label">{ errors.email?.type==='required' && <span    className="label-text-alt text-red-500">{errors.email.message}</span>}
+                { errors.email?.type==='pattern' && <span    className="label-text-alt text-red-500">{errors.email.message}</span>}</label>
                
                  </div>
 
                  {/* password filed */}
 
 
-                <div class="form-control w-full max-w-xs">
-                 <label class="label">
-                <span class="label-text">Password</span>
+               <div    className="form-control w-full max-w-xs">
+                 <label    className="label">
+                <span    className="label-text">Password</span>
              
                  </label>
                  <input  {...register("password", { 
@@ -99,22 +108,24 @@ const LogIn = () => {
                  } })} 
 
                  type="password" placeholder="Password" 
-                class="input input-bordered w-full max-w-xs" />
-                <label className="label">
-                    { errors.password?.type==='required' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}
-                    { errors.email?.type==='pattern' && <span className="label-text-alt text-red-500">{errors.password.message}</span>}
+                  className="input input-bordered w-full max-w-xs" />
+                <label    className="label">
+                    { errors.password?.type==='required' && <span    className="label-text-alt text-red-500">{errors.password.message}</span>}
+                    { errors.email?.type==='pattern' && <span    className="label-text-alt text-red-500">{errors.password.message}</span>}
+                    <Link onClick={forgetPassword} lass="label-text">Forget Password</Link>
+
                 </label>
                
                  </div>
 
                  {singInError}
-                <input type="submit" className="btn btn-primary w-full max-w-lg text-white text-bold" value="LogIn" />
+                <input type="submit"    className="btn btn-primary w-full max-w-lg text-white text-bold" value="LogIn" />
           </form>
-          <p>New to Doctors Portal? <Link to="/signup" className="text-primary">Create new account</Link></p>
-          <div class="divider">OR</div>
+          <p>New to Doctors Portal? <Link to="/signup"    className="text-primary">Create new account</Link></p>
+        <div    className="divider">OR</div>
           <button
             onClick={() => signInWithGoogle()}
-            className="btn btn-accent w-full"
+               className="btn btn-accent w-full"
           >
             Continue With Google
           </button>
