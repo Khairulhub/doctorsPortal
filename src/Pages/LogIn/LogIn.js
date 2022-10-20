@@ -3,6 +3,7 @@ import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWith
 import auth from "../../Firebase.init";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import useToken from "../../Hooks/UseToken";
 
 const LogIn = () => {
   const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
@@ -25,13 +26,13 @@ const LogIn = () => {
     const location = useLocation();
     let from = location.state?.from || '/appointment';
 
-
+    const [token] = useToken(user || gUser)
     useEffect(() => {
-      if (user||gUser) {
+      if (token) {
         console.log(user||gUser);
         navigate(from, {replace: true})
     }
-    }, [user, gUser, navigate, from])
+    }, [token, navigate, from])
 
     if(error || gError ||passwordError){
         singInError = <p    className="text-red-500">{error?.message || gError?.message || passwordError?.message}</p>

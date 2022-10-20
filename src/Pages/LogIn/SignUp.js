@@ -3,6 +3,7 @@ import { useCreateUserWithEmailAndPassword, useSendEmailVerification, useSignInW
 import auth from "../../Firebase.init";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import useToken from '../../Hooks/UseToken';
 
 const SignUp = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
@@ -16,6 +17,8 @@ const SignUp = () => {
     error,
   ] = useCreateUserWithEmailAndPassword(auth);
   const [updateProfile, updating, updateError] = useUpdateProfile(auth);
+
+  const [token] = useToken(user||gUser);
 
   const navigate = useNavigate();
 
@@ -38,8 +41,8 @@ const [sendEmailVerification, sending, emailError] = useSendEmailVerification(au
     }
 
 
-    if (user||gUser) {
-        console.log(user||gUser);
+    if (token) {
+        navigate('/appointment')
     }
 
     
@@ -51,7 +54,7 @@ const [sendEmailVerification, sending, emailError] = useSendEmailVerification(au
       await sendEmailVerification();
       // , photoURL
 
-      navigate('/appointment')
+      // navigate('/appointment')
       };
 
 

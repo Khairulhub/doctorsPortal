@@ -16,8 +16,8 @@ const Deshbord = () => {
     <label for="my-drawer-2" class="drawer-overlay"></label> 
     <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
       {/* <!-- Sidebar content here --> */}
-      <li><Link to='/deshbord'>Sidebar Item 1</Link></li>
-      <li><Link to='/deshbord/review'>Sidebar Item 2</Link></li>
+      <li><Link to='/deshbord'>My Appointments</Link></li>
+      <li><Link to='/deshbord/review'>My Review</Link></li>
     </ul>
   
   </div>
