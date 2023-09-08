@@ -20,14 +20,9 @@ const Navbar = () => {
         <Link to="/about">About</Link>
       </li>
       <li>
-        <Link to="/appointment">Appointment</Link>
+        <Link to="/task">Task</Link>
       </li>
-      <li>
-        <Link to="/reviews">Reviews</Link>
-      </li>
-      <li>
-        <Link to="/contact">Contact Us</Link>
-      </li>
+      
       {user && (
         <li>
           <Link to="/deshbord">Deshbord</Link>
@@ -45,7 +40,7 @@ const Navbar = () => {
     </>
   );
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar  bg-base-100">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabindex="0" class="btn btn-ghost lg:hidden">
@@ -71,9 +66,9 @@ const Navbar = () => {
             {menuItems}
           </ul>
         </div>
-        <a className="btn btn-ghost normal-case text-xl">Doctors Portal</a>
+        <a className="btn btn-ghost normal-case text-xl">Task Manager</a>
       </div>
-      <div className="navbar-end hidden lg:flex">
+      <div className="navbar-end w-full hidden lg:flex">
         <ul className="menu menu-horizontal p-0">{menuItems}</ul>
       </div>
       <div className="navbar-end">

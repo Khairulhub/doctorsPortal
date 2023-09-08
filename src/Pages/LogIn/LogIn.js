@@ -24,7 +24,7 @@ const LogIn = () => {
     let singInError;
     const navigate = useNavigate();
     const location = useLocation();
-    let from = location.state?.from || '/appointment';
+    let from = location.state?.from || '/task';
 
     const [token] = useToken(user || gUser)
     useEffect(() => {
@@ -122,7 +122,7 @@ const LogIn = () => {
                  {singInError}
                 <input type="submit"    className="btn btn-primary w-full max-w-lg text-white text-bold" value="LogIn" />
           </form>
-          <p>New to Doctors Portal? <Link to="/signup"    className="text-primary">Create new account</Link></p>
+          <p>New to Task Manager? <Link to="/signup"    className="text-primary">Create new account</Link></p>
         <div    className="divider">OR</div>
           <button
             onClick={() => signInWithGoogle()}

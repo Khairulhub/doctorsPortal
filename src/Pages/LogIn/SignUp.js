@@ -6,44 +6,34 @@ import { Link, useNavigate } from "react-router-dom";
 import useToken from '../../Hooks/useToken';
 
 const SignUp = () => {
-    const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
-
-  const {register, formState: { errors },handleSubmit } = useForm();
-  
-  const [
-    createUserWithEmailAndPassword,
-    user,
-    loading,
-    error,
-  ] = useCreateUserWithEmailAndPassword(auth);
+  const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
+  const { register, formState: { errors }, handleSubmit } = useForm();
+  const [createUserWithEmailAndPassword, user, loading, error] = useCreateUserWithEmailAndPassword(auth);
   const [updateProfile, updating, updateError] = useUpdateProfile(auth);
-
-  const [token] = useToken(user||gUser);
-
+  const [token] = useToken(user || gUser);
   const navigate = useNavigate();
+
 
 // email varification
 const [sendEmailVerification, sending, emailError] = useSendEmailVerification(auth);
 
-    let signUpError;
+  let signUpError;
 
+  if (error || gError || updateError || emailError) {
+    signUpError = <p className="text-red-500">{error?.message || gError?.message || updateError?.message || emailError?.message}</p>
+  }
 
-    if(error || gError ||updateError || emailError){
-        signUpError = <p    className="text-red-500">{error?.message || gError?.message || updateError?.message || emailError?.message}</p>
-    }
+  if (gLoading || loading || updating || sending) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <button className="loading btn">Loading...</button>
+      </div>
+    );
+  }
 
-
-
-    if(gLoading || loading || updating || sending){
-        return <div    className="flex justify-center items-center h-screen">
-            <button    className=" loading btn">Loading...</button>
-        </div>
-    }
-
-
-    if (token) {
-        navigate('/appointment');
-    }
+  if (token) {
+    navigate('/task');
+  }
 
     
     
@@ -54,7 +44,7 @@ const [sendEmailVerification, sending, emailError] = useSendEmailVerification(au
       await sendEmailVerification();
       // , photoURL
 
-      // navigate('/appointment')
+      // navigate('/task')
       };
 
 
